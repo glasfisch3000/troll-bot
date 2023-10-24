@@ -1,5 +1,5 @@
 const guildID = require(__dirname + "/../../ids.js").guildID
-const kingStickerID = "1160180926492463154"
+const kingStickerID = "1164858902739963914"
 const patterns = [
   "king",
 ]
@@ -15,13 +15,13 @@ module.exports = async (client, message, logger) => {
       if(content.includes(pattern)) {
         log("pattern found, replying")
 
-        const guild = client.guilds.cache.get(guildID) || client.guilds.fetch(guildID)
+        const guild = await client.guilds.cache.get(guildID) || await client.guilds.fetch(guildID)
         if(!guild) {
           log("guild not found")
           break
         }
 
-        const sticker = guild.stickers.fetch(kingStickerID)
+        const sticker = await guild.stickers.fetch(kingStickerID)
         if(!sticker) {
           log("sticker not found")
           break
