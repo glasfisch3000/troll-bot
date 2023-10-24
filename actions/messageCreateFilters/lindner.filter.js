@@ -8,13 +8,21 @@ const patterns = [
   "wirtschaft",
 ]
 
-module.exports = async (client, message) => {
-  let content = message.content.toLowerCase()
+module.exports = async (client, message, logger) => {
+  const { log, err } = logger("lindner.filter")
 
-  for(const pattern of patterns) {
-    if(content.includes(pattern)) {
-      message.react(lindnerEmojiID)
-      break
+  try {
+    let content = message.content.toLowerCase()
+
+    for(const pattern of patterns) {
+      log(`checking pattern '${pattern}'`)
+      if(content.includes(pattern)) {
+        log("pattern found, reacting")
+        message.react(lindnerEmojiID)
+        break
+      }
     }
+  } catch(error) {
+    err(error)
   }
 }

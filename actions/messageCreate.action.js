@@ -1,24 +1,40 @@
 const fs = require("fs").promises
 const { clientID } = require(__dirname + "/../ids.js")
+const sessionID = require(__dirname + "/sessionid.js")
 
-module.exports = async (client) => {
-  client.on("messageCreate", async message => {
-    try {
-      console.log(`received message: ${message.id} from ${message.author.id} in ${message.channelId} (${message.guildId})`)
+module.exports = async (client, logger) => {
+  const { log, err, childLogger } = logger("messageCreate.action")
 
-      if(message.author.id == clientID) return
+  try {
+    log("adding client listener")
+    client.on("messageCreate", async message => {
+      const child = childLogger("session-" + sessionID())
 
-      const files = await fs.readdir(__dirname + "/messageCreateFilters")
+      try {
+        child.log(`received message: ${message.id} from ${message.author.id} in ${message.channelId} (${message.guildId})`)
 
-      for(const file of files) {
-        if(file.endsWith(".filter.js")) {
-          require(__dirname + "/messageCreateFilters/" + file)(client, message)
+        if(message.author.id == clientID) {
+          child.log("message came from me lol")
+          return
         }
-      }
-    } catch(err) {
-      console.log("[messageCreate] error: " + err)
-    }
-  })
 
-  console.log("[messageCreate] setup done")
+        child.log("listing filters")
+        const files = await fs.readdir(__dirname + "/messageCreateFilters")
+
+        for(const file of files) {
+          log("checking file " + file)
+          if(file.endsWith(".filter.js")) {
+            log("activating file " + file)
+            require(__dirname + "/messageCreateFilters/" + file)(client, message, child.childLogger)
+          }
+        }
+      } catch(err) {
+        err(err)
+      }
+    })
+  } catch(error) {
+    err(error)
+  }
+
+  log("setup done")
 }

@@ -1,20 +1,31 @@
-const discordjs = require("discord.js")
-const { Client, GatewayIntentBits } = discordjs
-const token = require(__dirname + "/token.js")
+const { log, err, childLogger } = require(__dirname + "/logging.js")(["app"])
 
-console.log("[setup] library imports done")
+try {
+	log("starting app")
+	log("importing libraries")
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessageReactions] })
-client.once("ready", () => {
-	console.log("[setup] discord.js client ready")
-})
+	const discordjs = require("discord.js")
+	const { Client, GatewayIntentBits } = discordjs
+	const token = require(__dirname + "/token.js")
 
-client.login(token)
-	.then(() => {
-		console.log("[setup] successfully logged in to discord api")
+	log("library imports done")
+	log("starting client")
+
+	const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessageReactions] })
+	client.once("ready", () => {
+		log("discord.js client ready")
+		log("starting action.js")
+		require(__dirname + "/actions.js")(client, childLogger)
 	})
-	.catch(err => {
-		throw err
-	})
 
-require(__dirname + "/actions.js")(client)
+	client.login(token)
+		.then(() => {
+			log("successfully logged in to discord api")
+		})
+		.catch(error => {
+			throw error
+		})
+} catch(error) {
+	err(error)
+	throw error
+}

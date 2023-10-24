@@ -1,23 +1,24 @@
 const fs = require("fs").promises
-var actions = []
 
-async function init(client) {
-  console.log("[actions-setup] listing action files")
-  const files = await fs.readdir(__dirname + "/actions")
+async function init(client, logger) {
+  const { log, err, childLogger } = logger("actions")
 
-  console.log("[actions-setup] importing action files")
-  for(const file of files) {
-    if(file.endsWith(".action.js")) {
-      actions.push(require(__dirname + "/actions/" + file))
+  try {
+    log("listing action files")
+    const files = await fs.readdir(__dirname + "/actions")
+
+    for(const file of files) {
+      log("checking file " + file)
+      if(file.endsWith(".action.js")) {
+        log("activating file " + file)
+        require(__dirname + "/actions/" + file)(client, childLogger)
+      }
     }
-  }
-  console.log("[actions-setup] successfully imported action files")
-
-  for(const action of actions) {
-    action(client)
+  } catch(error) {
+    err(error)
   }
 
-  console.log("[actions-setup] setup done")
+  log("setup done")
 }
 
 module.exports = init
