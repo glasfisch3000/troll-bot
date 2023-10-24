@@ -133,3 +133,6 @@ ids.js
 # useless macOS files
 .DS_Store
 */.DS_Store
+
+# log files
+log.txt
