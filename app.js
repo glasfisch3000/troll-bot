@@ -4,7 +4,7 @@ const token = require(__dirname + "/token.js")
 
 console.log("[setup] library imports done")
 
-const client = new Client({ intents: [GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] })
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessageReactions] })
 client.once("ready", () => {
 	console.log("[setup] discord.js client ready")
 })

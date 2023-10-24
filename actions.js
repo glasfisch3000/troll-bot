@@ -17,7 +17,7 @@ async function init(client) {
     action(client)
   }
 
-  console.log("[action-setup] setup done")
+  console.log("[actions-setup] setup done")
 }
 
 module.exports = init
