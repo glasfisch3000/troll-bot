@@ -6,6 +6,7 @@ const patterns = [
   "kapital",
   "markt",
   "wirtschaft",
+  "wiwi",
 ]
 
 module.exports = async (client, message, logger) => {
