@@ -4,7 +4,7 @@ const patterns = [
   "fdp",
   "geringverdiener",
   "kapital",
-  "markt"
+  "markt",
   "wirtschaft",
 ]
 
