@@ -10,7 +10,7 @@ module.exports = (environment) => {
 }
 
 async function _log(date, environment, status, message) {
-  var text = `(${id}) ${date} `
+  var text = `(${id}) ${date.toISOString()} `
   for(const component of environment) {
     text = `${text}[${component}] `
   }
