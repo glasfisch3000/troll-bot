@@ -125,3 +125,11 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# private information
+token.js
+ids.js
+
+# useless macOS files
+.DS_Store
+*/.DS_Store

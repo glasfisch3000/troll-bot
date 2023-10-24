@@ -1,0 +1,17 @@
+{
+  "name": "troll-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jakob Danckwerts",
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/builders": "^1.6.5",
+    "@discordjs/rest": "^2.0.1",
+    "discord-api-types": "^0.37.61",
+    "discord.js": "^14.13.0"
+  }
+}
