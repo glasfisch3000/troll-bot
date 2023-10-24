@@ -1,6 +1,8 @@
 const emojiID = "1163430015678029884"
 const patterns = [
   "edwin",
+  "sysadwin",
+  "sus",
 ]
 
 module.exports = async (client, message, logger) => {

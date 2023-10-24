@@ -2,6 +2,7 @@ const guildID = require(__dirname + "/../../ids.js").guildID
 const kingStickerID = "1164858902739963914"
 const patterns = [
   "king",
+  "hosenstall",
 ]
 
 module.exports = async (client, message, logger) => {
