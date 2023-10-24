@@ -11,7 +11,7 @@ const patterns = [
 module.exports = async (client, message) => {
   let content = message.content.toLowerCase()
 
-  for(const pattern in patterns) {
+  for(const pattern of patterns) {
     if(content.includes(pattern)) {
       message.react(lindnerEmojiID)
       break
