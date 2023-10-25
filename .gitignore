@@ -134,5 +134,6 @@ ids.js
 .DS_Store
 */.DS_Store
 
-# log files
+# log and data files
 log
+data

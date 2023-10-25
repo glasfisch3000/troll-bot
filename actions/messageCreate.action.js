@@ -19,7 +19,7 @@ module.exports = async (client, logger) => {
         }
 
         child.log("listing filters")
-        const files = await fs.readdir(__dirname + "/messageCreateFilters")
+        const files = await fs.readdir(__dirname + "/../data/messageCreateFilters")
 
         for(const file of files) {
           child.log(`checking file "${file}"`)

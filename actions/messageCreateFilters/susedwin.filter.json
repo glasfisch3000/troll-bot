@@ -1,8 +1,0 @@
-{
-  "patterns": [
-    { "regex": "edwin", "flags": "i" },
-    { "regex": "sysadwin", "flags": "i" },
-    { "regex": "sus", "flags": "i" }
-  ],
-  "react": "1163430015678029884"
-}
