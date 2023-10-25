@@ -5,6 +5,7 @@ const patterns = [
   "schabernack",
   "cdu",
   "rentner",
+  "ballern",
 ]
 
 module.exports = async (client, message, logger) => {
