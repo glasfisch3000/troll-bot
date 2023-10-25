@@ -1,13 +1,16 @@
 module.exports = (environment) => {
   return {
-    log: (message) => { _log(new Date(), environment, "LOG", message) },
-    err: (message) => { _log(new Date(), environment, "ERROR", message) },
+    log: (message) => { _log(environment, "LOG", message) },
+    err: (message) => { _log(environment, "ERROR", message) },
     childLogger: (child) => { return module.exports((environment || []).concat([`${child}`])) },
   }
 }
 
-function _log(date, environment, status, message) {
-  var text = `${date.toISOString()} `
+function _log(environment, status, message) {
+  const hrtime = process.hrtime()
+  const timestamp = hrtime[0]*1_000_000 + hrtime[1]/1000
+  
+  var text = `${timestamp} `
   for(const component of environment) {
     text = `${text}[${component}] `
   }
