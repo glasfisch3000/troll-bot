@@ -1,0 +1,15 @@
+{
+  "patterns": [
+    { "regex": "king", "flags": "i" },
+    { "regex": "hosenstall", "flags": "i" }
+  ],
+  "reply": {
+    "reply": "",
+    "stickers": [
+      {
+        "id": "1164858902739963914",
+        "guildID": "1160180926492463154"
+      }
+    ]
+  }
+}

@@ -5,7 +5,7 @@ module.exports = (environment) => {
   return {
     log: async (message) => { await _log(new Date(), environment, "LOG", message) },
     err: async (message) => { await _log(new Date(), environment, "ERROR", message) },
-    childLogger: (child) => { return module.exports((environment || []).concat([child])) },
+    childLogger: (child) => { return module.exports((environment || []).concat([`${child}`])) },
   }
 }
 
