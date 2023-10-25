@@ -11,7 +11,7 @@ function _log(date, environment, status, message) {
   for(const component of environment) {
     text = `${text}[${component}] `
   }
-  text = `${text}${status || "LOG"}: ${message}\n`
+  text = `${text}${status || "LOG"}: ${message}`
 
   console.log(text)
 }
