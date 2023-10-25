@@ -44,7 +44,7 @@ async function checkFilterFile(logger, client, message, file) {
   const { log, err, childLogger } = logger(file)
 
   try {
-    const filter = JSON.parse(await fs.readFile(__dirname + "/messageCreateFilters/" + file))
+    const filter = JSON.parse(await fs.readFile(__dirname + "/../data/messageCreateFilters/" + file))
     if(!filter || !filter.patterns) return
     if(!checkPatterns(message, filter.patterns)) return
 
