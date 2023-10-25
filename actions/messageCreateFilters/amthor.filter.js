@@ -2,6 +2,9 @@ const guildID = require(__dirname + "/../../ids.js").guildID
 const stickerID = "1166653231607320606"
 const patterns = [
   "amthor",
+  "schabernack",
+  "cdu",
+  "rentner",
 ]
 
 module.exports = async (client, message, logger) => {
@@ -20,7 +23,7 @@ module.exports = async (client, message, logger) => {
           log("guild not found")
           break
         }
-        
+
         const sticker = await guild.stickers.fetch(stickerID)
         if(!sticker) {
           log("sticker not found")
