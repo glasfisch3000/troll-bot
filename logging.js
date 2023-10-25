@@ -8,9 +8,9 @@ module.exports = (environment) => {
 
 function _log(environment, status, message) {
   const hrtime = process.hrtime()
-  const timestamp = hrtime[0]*1_000_000 + hrtime[1]/1000
-  
-  var text = `${timestamp} `
+  const timestamp = Math.floor(hrtime[0]*1_000_000 + hrtime[1]/1000)
+
+  var text = `${timestamp}mics `
   for(const component of environment) {
     text = `${text}[${component}] `
   }
