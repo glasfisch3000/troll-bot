@@ -63,7 +63,7 @@ async function checkFilterFile(logger, client, message, file) {
     }
 
     if(filter.kickMember) {
-      kickMember(childLogger, client, message, client.kickMember)
+      kickMember(childLogger, client, message, filter.kickMember)
     }
   } catch(error) {
     err(error)
@@ -172,7 +172,7 @@ async function setNickname(logger, client, message, guildID, userID, newNickname
 async function kickMember(logger, client, message, members) {
   const { log, err, childLogger } = logger("kickMember")
 
-  log(`kicking members: ${members ? "members", "no members"}`)
+  log(`kicking members: ${members ? "members" : "no members"}`)
 
   if(!message.guild) {
     err("guild not found")
