@@ -100,29 +100,26 @@ async function reply(logger, client, message, reply, stickers) {
 
   var stickerAttachments = []
 
-  if(!stickers || typeof stickers[Symbol.iterator] != "function") {
-    err("stickers not iterable")
-    return
-  }
+  if(stickers && typeof stickers[Symbol.iterator] == "function") {
+    for(const sticker of stickers) {
+      if(!sticker || !sticker.id || !sticker.guildID) continue
 
-  for(const sticker of stickers) {
-    if(!sticker || !sticker.id || !sticker.guildID) continue
+      log("checking sticker " + sticker.id + " - " + sticker.guildID)
 
-    log("checking sticker " + sticker.id + " - " + sticker.guildID)
+      const guild = await client.guilds.cache.get(sticker.guildID) || await client.guilds.fetch(sticker.guildID)
+      if(!guild) {
+        log("guild not found")
+        continue
+      }
 
-    const guild = await client.guilds.cache.get(sticker.guildID) || await client.guilds.fetch(sticker.guildID)
-    if(!guild) {
-      log("guild not found")
-      continue
+      const stickerAttachment = await guild.stickers.fetch(sticker.id)
+      if(!stickerAttachment) {
+        log("sticker not found")
+        continue
+      }
+
+      stickerAttachments.push(stickerAttachment)
     }
-
-    const stickerAttachment = await guild.stickers.fetch(sticker.id)
-    if(!stickerAttachment) {
-      log("sticker not found")
-      continue
-    }
-
-    stickerAttachments.push(stickerAttachment)
   }
 
   log("sending reply")
