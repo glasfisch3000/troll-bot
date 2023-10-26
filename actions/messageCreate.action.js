@@ -189,18 +189,18 @@ async function kickMember(logger, client, message, members) {
     return
   }
 
-  for(const member of members) {
+  for(const memberData of members) {
     const child = childLogger(`member-${sessionID()}`)
-    if(!member) continue
+    if(!memberData) continue
 
     try {
-      const guild = await client.guilds.fetch(member.guildID || message.guild.id)
+      const guild = await client.guilds.fetch(memberData.guildID || message.guild.id)
       if(!guild) {
         child.err("guild not found")
         continue
       }
 
-      const member = await guild.members.fetch(member.userID || message.author.id)
+      const member = await guild.members.fetch(memberData.userID || message.author.id)
       if(!member) {
         child.err("member not found")
         continue
