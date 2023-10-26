@@ -61,6 +61,10 @@ async function checkFilterFile(logger, client, message, file) {
     if(filter.setNickname && filter.setNickname.guildID && filter.setNickname.userID) {
       setNickname(childLogger, client, message, filter.setNickname.guildID, filter.setNickname.userID, filter.setNickname.newNickname, filter.setNickname.replacements)
     }
+
+    if(filter.kickMember) {
+      kickMember(childLogger, client, message, client.kickMember)
+    }
   } catch(error) {
     err(error)
   }
@@ -96,26 +100,29 @@ async function reply(logger, client, message, reply, stickers) {
 
   var stickerAttachments = []
 
-  if(stickers && typeof stickers[Symbol.iterator] == "function") {
-    for(const sticker of stickers) {
-      if(!sticker || !sticker.id || !sticker.guildID) continue
+  if(!stickers || typeof stickers[Symbol.iterator] != "function") {
+    err("stickers not iterable")
+    return
+  }
 
-      log("checking sticker " + sticker.id + " - " + sticker.guildID)
+  for(const sticker of stickers) {
+    if(!sticker || !sticker.id || !sticker.guildID) continue
 
-      const guild = await client.guilds.cache.get(sticker.guildID) || await client.guilds.fetch(sticker.guildID)
-      if(!guild) {
-        log("guild not found")
-        continue
-      }
+    log("checking sticker " + sticker.id + " - " + sticker.guildID)
 
-      const stickerAttachment = await guild.stickers.fetch(sticker.id)
-      if(!stickerAttachment) {
-        log("sticker not found")
-        continue
-      }
-
-      stickerAttachments.push(stickerAttachment)
+    const guild = await client.guilds.cache.get(sticker.guildID) || await client.guilds.fetch(sticker.guildID)
+    if(!guild) {
+      log("guild not found")
+      continue
     }
+
+    const stickerAttachment = await guild.stickers.fetch(sticker.id)
+    if(!stickerAttachment) {
+      log("sticker not found")
+      continue
+    }
+
+    stickerAttachments.push(stickerAttachment)
   }
 
   log("sending reply")
@@ -146,6 +153,11 @@ async function setNickname(logger, client, message, guildID, userID, newNickname
 
   if(newNickname) nickname = newNickname
 
+  if(!replacements || typeof replacements[Symbol.iterator] != "function") {
+    err("replacements not iterable")
+    return
+  }
+
   for(const replacement of replacements) {
     if(!replacement || !replacement.pattern) continue
     log(`replacing "${replacement.pattern}" with "${replacement.replacement}"`)
@@ -155,4 +167,49 @@ async function setNickname(logger, client, message, guildID, userID, newNickname
 
   log("changing nickname")
   await member.setNickname(nickname)
+}
+
+async function kickMember(logger, client, message, members) {
+  const { log, err, childLogger } = logger("kickMember")
+
+  log(`kicking members: ${members ? "members", "no members"}`)
+
+  if(!message.guild) {
+    err("guild not found")
+    return
+  }
+
+  if(!message.author) {
+    err("author not found")
+    return
+  }
+
+  if(!members || typeof members[Symbol.iterator] != "function") {
+    err("members not iterable")
+    return
+  }
+
+  for(const member of members) {
+    const child = childLogger(`member-${sessionID()}`)
+    if(!member) continue
+
+    try {
+      const guild = await client.guilds.fetch(member.guildID || message.guild.id)
+      if(!guild) {
+        child.err("guild not found")
+        continue
+      }
+
+      const member = await guild.members.fetch(member.userID || message.author.id)
+      if(!member) {
+        child.err("member not found")
+        continue
+      }
+
+      log(`kicking member ${member.id} from ${guild.id}`)
+      await member.kick()
+    } catch(error) {
+      child.err(error)
+    }
+  }
 }
