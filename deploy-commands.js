@@ -5,6 +5,9 @@ const { clientID, guildID } = require(__dirname + "/ids.js")
 const token = require(__dirname + "/token.js")
 
 const commands = [
+  new SlashCommandBuilder()
+    .setName("lindner")
+    .setDescription("Kapital maximieren"),
   // new SlashCommandBuilder()
   //   .setName("rickroll")
   //   .setDescription("Rickroll someone!")
@@ -14,6 +17,6 @@ const commands = [
 
 const rest = new REST({ version: "9" }).setToken(token)
 
-rest.put(Routes.applicationGuildCommands(clientID, guildID), { body: commands })
-  .then(() => console.log("successfully registered application guild commands for '" + guildID + "'"))
-  .catch(console.error)
+rest.put(Routes.applicationCommands(clientID), { body: commands })
+	.then(() => console.log("successfully registered application commands"))
+	.catch(console.error)

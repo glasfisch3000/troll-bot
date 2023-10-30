@@ -137,3 +137,4 @@ ids.js
 # log and data files
 log
 data
+server/data
