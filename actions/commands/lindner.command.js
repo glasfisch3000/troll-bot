@@ -16,7 +16,7 @@ module.exports.callback = async (logger, client, interaction) => {
       return
     }
 
-    const lines = quotes.split(/\n/g)
+    const lines = new String(quotes).split(/\n/g)
 
     if(!lines) {
       err("quotes empty")
