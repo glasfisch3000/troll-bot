@@ -24,7 +24,7 @@ module.exports.callback = async (logger, client, interaction) => {
       return
     }
 
-    const line = lines[floor(Math.random()*lines.length)]
+    const line = lines[Math.floor(Math.random()*lines.length)]
 
     log("replying")
     await interaction.reply({ content: line })
