@@ -1,4 +1,4 @@
-const sessionID = require(__dirname + "/../sessionid.js")
+const sessionID = require(__dirname + "/sessionid.js")
 const fs = require("fs").promises
 var commands = []
 
