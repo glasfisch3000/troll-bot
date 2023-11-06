@@ -33,7 +33,7 @@ module.exports.callback = async (logger, client, interaction) => {
       }
     }
 
-    if(!lines) {
+    if(!lines || lines.length < 1) {
       err("no quotes matching filters")
       await interaction.reply({ content: "couldn't find any content" })
       return
