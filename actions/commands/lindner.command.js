@@ -25,8 +25,8 @@ module.exports.callback = async (logger, client, interaction) => {
     }
 
     const filters = interaction.options._hoistedOptions.find(option => option.name === "filter")
-    if(filters) {
-      for(const filter in filters.split(/ /g)) {
+    if(filters && filters.value) {
+      for(const filter in filters.value.split(/ /g)) {
         lines = lines.filter(line => line.includes(filter))
       }
     }
