@@ -27,7 +27,8 @@ module.exports.callback = async (logger, client, interaction) => {
     const filters = interaction.options._hoistedOptions.find(option => option.name === "filter")
     if(filters && filters.value) {
       log("checking filters")
-      log(filters.value)
+      log(new String(filters.value))
+      log(new String(filters.value).split(/ /g))
       for(const filter in filters.value.split(/ /g)) {
         log(`checking filter: "${filter.value}"`)
         lines = lines.filter(line => line.toLowerCase().includes(filter.toLowerCase()))
