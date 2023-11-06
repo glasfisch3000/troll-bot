@@ -78,7 +78,7 @@ function invokeFilterApplications(logger, client, message, applications) {
       kickMember(childLogger, client, message, applications.kickMember)
     }
 
-    if(actions.random && typeof applications.random == "array") {
+    if(applications.random && typeof applications.random == "array") {
       log(`parsing random array (length ${applications.random.length})`)
 
       invokeFilterApplications(childLogger, client, message, applications.random[Math.floor(Math.random() * applications.random.length)])
