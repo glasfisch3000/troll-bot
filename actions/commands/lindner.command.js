@@ -16,10 +16,23 @@ module.exports.callback = async (logger, client, interaction) => {
       return
     }
 
-    const lines = new String(quotes).split(/\n/g)
+    let lines = new String(quotes).split(/\n/g)
 
     if(!lines) {
       err("quotes empty")
+      await interaction.reply({ content: "couldn't find any content" })
+      return
+    }
+
+    const filters = interaction.options._hoistedOptions.find(option => option.name === "filter")
+    if(filters) {
+      for(const filter in filters.split(/ /g)) {
+        lines = lines.filter(line => line.includes(filter))
+      }
+    }
+
+    if(!lines) {
+      err("no quotes matching filters")
       await interaction.reply({ content: "couldn't find any content" })
       return
     }

@@ -7,12 +7,9 @@ const token = require(__dirname + "/token.js")
 const commands = [
   new SlashCommandBuilder()
     .setName("lindner")
-    .setDescription("Kapital maximieren"),
-  // new SlashCommandBuilder()
-  //   .setName("rickroll")
-  //   .setDescription("Rickroll someone!")
-  //   .addStringOption(option =>
-  //     option.setName("user-id").setDescription("The ID of the user you want to rickroll.").setRequired(true)),
+    .setDescription("Kapital maximieren")
+    .addStringOption(option =>
+      option.setName("filter").setDescription("Suchbegriffe").setRequired(false)),
 ].map(command => command.toJSON())
 
 const rest = new REST({ version: "9" }).setToken(token)
