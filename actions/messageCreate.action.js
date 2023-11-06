@@ -50,20 +50,38 @@ async function checkFilterFile(logger, client, message, file) {
 
     log("applying filter")
 
-    if(filter.react) {
-      react(childLogger, message, filter.react)
+    invokeFilterApplications(childLogger, client, message, filter)
+  } catch(error) {
+    err(error)
+  }
+}
+
+function invokeFilterApplications(logger, client, message, applications) {
+  const { log, err, childLogger } = logger("applications")
+
+  try {
+    log("checking applications")
+
+    if(applications.react) {
+      react(childLogger, message, applications.react)
     }
 
-    if(filter.reply) {
-      reply(childLogger, client, message, filter.reply.reply, filter.reply.stickers)
+    if(applications.reply) {
+      reply(childLogger, client, message, applications.reply.reply, applications.reply.stickers)
     }
 
-    if(filter.setNickname && filter.setNickname.guildID && filter.setNickname.userID) {
-      setNickname(childLogger, client, message, filter.setNickname.guildID, filter.setNickname.userID, filter.setNickname.newNickname, filter.setNickname.replacements)
+    if(applications.setNickname && applications.setNickname.guildID && applications.setNickname.userID) {
+      setNickname(childLogger, client, message, applications.setNickname.guildID, applications.setNickname.userID, applications.setNickname.newNickname, applications.setNickname.replacements)
     }
 
-    if(filter.kickMember) {
-      kickMember(childLogger, client, message, filter.kickMember)
+    if(applications.kickMember) {
+      kickMember(childLogger, client, message, applications.kickMember)
+    }
+
+    if(actions.random && typeof applications.random == "array") {
+      log(`parsing random array (length ${applications.random.length})`)
+
+      invokeFilterApplications(childLogger, client, message, applications.random[Math.floor(Math.random() * applications.random.length)])
     }
   } catch(error) {
     err(error)
@@ -91,7 +109,7 @@ function checkPatterns(message, patterns) {
 
 async function react(logger, message, emojiID) {
   const { log, err, childLogger } = logger("react")
-  
+
   try {
     await message.react(emojiID)
   } catch(error) {
