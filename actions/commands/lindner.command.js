@@ -12,7 +12,7 @@ module.exports.callback = async (logger, client, interaction) => {
 
     if(!quotes) {
       err("no quotes found")
-      await interaction.reply({ content: "couldn't find any content" })
+      await interaction.reply({ content: "keine zitate gefunden" })
       return
     }
 
@@ -20,7 +20,7 @@ module.exports.callback = async (logger, client, interaction) => {
 
     if(!lines) {
       err("quotes empty")
-      await interaction.reply({ content: "couldn't find any content" })
+      await interaction.reply({ content: "keine zitate gefunden" })
       return
     }
 
@@ -35,7 +35,7 @@ module.exports.callback = async (logger, client, interaction) => {
 
     if(!lines || lines.length < 1) {
       err("no quotes matching filters")
-      await interaction.reply({ content: "couldn't find any content" })
+      await interaction.reply({ content: "keine zitate gefunden" })
       return
     }
 
@@ -47,7 +47,7 @@ module.exports.callback = async (logger, client, interaction) => {
     err(error)
 
     try {
-      await interaction.reply({ content: "error. idfk, check the logs" })
+      await interaction.reply({ content: "error. idfk, guck halt in die logs" })
     } catch(error) {
       err(error)
     }
