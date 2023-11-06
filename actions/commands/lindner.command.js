@@ -28,7 +28,7 @@ module.exports.callback = async (logger, client, interaction) => {
     if(filters && filters.value) {
       log("checking filters")
       for(const filter of new String(filters.value).split(/ /g)) {
-        log(`checking filter: "${filter.value}"`)
+        log(`checking filter: "${filter}"`)
         lines = lines.filter(line => line.toLowerCase().includes(filter.toLowerCase()))
       }
     }
