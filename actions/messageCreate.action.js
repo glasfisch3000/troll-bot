@@ -90,6 +90,8 @@ function checkPatterns(message, patterns) {
 }
 
 async function react(logger, message, emojiID) {
+  const { log, err, childLogger } = logger("react")
+  
   try {
     await message.react(emojiID)
   } catch(error) {
