@@ -1,3 +1,11 @@
+const crypto = require("crypto")
+
 module.exports = () => {
-  return ('0000000000000000' + Math.floor(Math.random() * 0xffff_ffff_ffff_ffff).toString(16).toUpperCase()).slice(-16)
+  const randomBuffer = new Uint32Array(2);
+  crypto.getRandomValues(randomBuffer);
+
+  const part1 = ('00000000' + randomBuffer[0].toString(16).toUpperCase()).slice(-8)
+  const part2 = ('00000000' + randomBuffer[1].toString(16).toUpperCase()).slice(-8)
+
+  return part1 + part2
 }
