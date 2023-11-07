@@ -1,3 +1,5 @@
+const sessionID = require(__dirname + "/actions/sessionid.js")
+
 module.exports = (environment) => {
   return {
     log: (message) => { _log(environment, "LOG", message) },
@@ -9,8 +11,9 @@ module.exports = (environment) => {
 function _log(environment, status, message) {
   const hrtime = process.hrtime()
   const timestamp = Math.floor(hrtime[0]*1_000_000 + hrtime[1]/1000)
+  const id = sessionID()
 
-  var text = `${timestamp} `
+  var text = `${timestamp}-${id} `
   for(const component of environment) {
     text = `${text}[${component}] `
   }
