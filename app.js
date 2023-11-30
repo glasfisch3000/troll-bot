@@ -1,5 +1,5 @@
 async function init() {
-	const { log, err, childLogger, reset } = require(__dirname + "/logging.js")(["app"])
+	const { log, err, childLogger } = require(__dirname + "/logging.js")(["app"])
 
 	try {
 		log("starting app")
