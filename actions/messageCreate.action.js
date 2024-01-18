@@ -366,8 +366,6 @@ async function editMessage(logger, client, message, matches, editPattern) {
       result += message.content.slice(currentMatchEnd)
     }
 
-    console.log(result)
-
     log("creating webhook")
 
     const webhook = await message.channel.createWebhook({
