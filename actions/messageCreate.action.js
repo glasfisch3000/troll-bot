@@ -56,7 +56,7 @@ async function checkFilterFile(logger, client, message, file) {
   }
 }
 
-function invokeFilterApplications(logger, client, message, applications) {
+function invokeFilterApplications(logger, client, message, applications, pickRandom) {
   const { log, err, childLogger } = logger("applications")
 
   try {
@@ -97,20 +97,25 @@ function invokeFilterApplications(logger, client, message, applications) {
       }
   
       if(application.random && typeof application.random == "array") {
-        log(`parsing random array (length ${applications.random.length})`)
-        
-        const randomIndex = Math.floor(Math.random() * application.random.length)
-        const randomElement = application.random[randomIndex]
+        log(`parsing random array (length ${application.random.length})`)
         parsedApplications.push(() => {
-          invokeFilterApplications(childLogger, client, message, [randomElement])
+          invokeFilterApplications(childLogger, client, message, application.random, true)
         })
       }
     }
 
-    log("activating applications")
+    if(pickRandom) {
+      log("activating random application")
 
-    for(const application of parsedApplications) {
-      application()
+      const randomIndex = Math.floor(Math.random() * parsedApplications.length)
+      const randomElement = parsedApplications[randomIndex]
+      randomElement()
+    } else {
+      log("activating applications")
+
+      for(const application of parsedApplications) {
+        application()
+      }
     }
   } catch(error) {
     err(error)
