@@ -45,12 +45,12 @@ async function checkFilterFile(logger, client, message, file) {
 
   try {
     const filter = JSON.parse(await fs.readFile(__dirname + "/../data/messageCreateFilters/" + file))
-    if(!filter || !filter.patterns) return
+    if(!filter || !filter.patterns || !filter.applications) return
     if(!checkPatterns(message, filter.patterns)) return
 
     log("applying filter")
 
-    invokeFilterApplications(childLogger, client, message, filter)
+    invokeFilterApplications(childLogger, client, message, filter.applications)
   } catch(error) {
     err(error)
   }
@@ -60,28 +60,57 @@ function invokeFilterApplications(logger, client, message, applications) {
   const { log, err, childLogger } = logger("applications")
 
   try {
-    log("checking applications")
+    log("parsing applications")
 
-    if(applications.react) {
-      react(childLogger, message, applications.react)
+    if(!applications || typeof applications[Symbol.iterator] != "function") {
+      err("applications not iterable")
+      return
     }
 
-    if(applications.reply) {
-      reply(childLogger, client, message, applications.reply.reply, applications.reply.stickers)
+    let parsedApplications = []
+
+    for(const application of applications) {
+      if(!application) continue
+
+      if(application.react) {
+        parsedApplications.push(() => { 
+          react(childLogger, message, application.react) 
+        })
+      }
+  
+      if(application.reply) {
+        parsedApplications.push(() => {
+          reply(childLogger, client, message, application.reply.reply, application.reply.stickers)
+        })
+      }
+  
+      if(application.setNickname && application.setNickname.guildID && application.setNickname.userID) {
+        parsedApplications.push(() => {
+          setNickname(childLogger, client, message, application.setNickname.guildID, application.setNickname.userID, application.setNickname.newNickname, application.setNickname.replacements)
+        })
+      }
+  
+      if(application.kickMember) {
+        parsedApplications.push(() => {
+          kickMember(childLogger, client, message, application.kickMember)
+        })
+      }
+  
+      if(application.random && typeof application.random == "array") {
+        log(`parsing random array (length ${applications.random.length})`)
+        
+        const randomIndex = Math.floor(Math.random() * application.random.length)
+        const randomElement = application.random[randomIndex]
+        parsedApplications.push(() => {
+          invokeFilterApplications(childLogger, client, message, [randomElement])
+        })
+      }
     }
 
-    if(applications.setNickname && applications.setNickname.guildID && applications.setNickname.userID) {
-      setNickname(childLogger, client, message, applications.setNickname.guildID, applications.setNickname.userID, applications.setNickname.newNickname, applications.setNickname.replacements)
-    }
+    log("activating applications")
 
-    if(applications.kickMember) {
-      kickMember(childLogger, client, message, applications.kickMember)
-    }
-
-    if(applications.random && typeof applications.random == "array") {
-      log(`parsing random array (length ${applications.random.length})`)
-
-      invokeFilterApplications(childLogger, client, message, applications.random[Math.floor(Math.random() * applications.random.length)])
+    for(const application of parsedApplications) {
+      application()
     }
   } catch(error) {
     err(error)
