@@ -21,8 +21,8 @@ module.exports = async (client, logger) => {
         }
 
         if(message.author.bot) {
-            child.err("message came from a bot")
-            return
+          child.log("message came from a bot")
+          return
         }
 
         if(message.author.id == clientID) {
