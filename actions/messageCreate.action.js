@@ -20,6 +20,11 @@ module.exports = async (client, logger) => {
           return
         }
 
+        if(message.author.bot) {
+            child.err("message came from a bot")
+            return
+        }
+
         if(message.author.id == clientID) {
           child.log("message came from me lol")
           return
