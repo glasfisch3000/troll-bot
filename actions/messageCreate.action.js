@@ -387,7 +387,7 @@ async function editMessage(logger, client, message, matches, editPattern) {
         .setURL(`https://discord.com/channels/${message.guildId}/${message.channelId}/${reference.id}`)
 
         if (reference.content) {
-        log("add message content to embed")
+          log("add message content to embed")
           embed.setDescription(reference.content)
         }
 
