@@ -378,8 +378,27 @@ async function editMessage(logger, client, message, matches, editPattern) {
       avatar: `https://cdn.discordapp.com/avatars/${message.author.id}/${message.author.avatar}`,
     })
 
+    const embeds = []
+    if (message.reference) {
+      log("message reference")
+      const reference = await message.fetchReference();
+      const embed = new EmbedBuilder()
+        .setTitle(`replying to @${reference.author.displayName}`)
+        .setURL(`https://discord.com/channels/${message.guildId}/${message.channelId}/${reference.id}`)
+
+        if (reference.content) {
+          log("add message content to embed")
+          embed.setDescription(reference.content)
+        }
+
+        embeds.push(embed)
+    }
+
     log("sending altered message")
-    await webhook.send(result)
+    await webhook.send({
+      content: result,
+      embeds,
+    })
 
     log("deleting old message")
     await message.delete()

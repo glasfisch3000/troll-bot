@@ -13,7 +13,9 @@ async function init() {
 		log("starting client")
 
 		const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessageReactions] })
-		client.once("ready", async () => {
+		client.once("ready", async (bot) => {
+			log(`bot online as ${bot.user.tag}`)
+
 			log("discord.js client ready")
 			log("starting action.js")
 			require(__dirname + "/actions.js")(client, childLogger)
