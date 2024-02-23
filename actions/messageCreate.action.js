@@ -383,11 +383,9 @@ async function editMessage(logger, client, message, matches, editPattern) {
       log("message reference")
       const reference = await message.fetchReference();
 
-      const member = message.guild?.members.cache.find((member => member.id == reference.author.id))
-      const tagged = member?.displayName ?? reference.author.displayName
-
+      const member = reference.member?.displayName ?? reference.author.displayName;
       const embed = new EmbedBuilder()
-        .setTitle(`replying to @${tagged}`)
+        .setTitle(`replying to @${member}`)
         .setURL(`https://discord.com/channels/${message.guildId}/${message.channelId}/${reference.id}`)
 
         if (reference.content) {
