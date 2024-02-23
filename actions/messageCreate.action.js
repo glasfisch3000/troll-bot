@@ -390,7 +390,11 @@ async function editMessage(logger, client, message, matches, editPattern) {
 
         if (reference.content) {
           log("add message content to embed")
-          embed.setDescription(reference.content)
+          let content = (reference.content.length > 110)
+            ? reference.content.slice(0, 100).trimEnd() + " ..."
+            : reference.content
+
+          embed.setDescription(content);
         }
 
         embeds.push(embed)
